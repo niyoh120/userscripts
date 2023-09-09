@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         给bgm.tv增加资源搜索功能
 // @namespace    https://github.com/niyoh120/userscripts
-// @version      0.1
+// @version      0.2
 // @description  给bgm.tv增加资源搜索功能
 // @author       niyoh
 // @match        https://bgm.tv/anime/list/*/collect*
@@ -37,13 +37,27 @@ await (async function () {
       if (originTitleTag && originTitleTag.textContent.trim()) {
         originTitle = originTitleTag.textContent.trim()
       }
+
+      const resources = [
+        {
+          name: 'tmdb',
+          searchURL: 'https://www.themoviedb.org/search/tv?query='
+        },
+        {
+          name: 'hanime1.me',
+          searchURL: 'https://hanime1.me/search?query='
+        }
+      ]
       let small = document.createElement('small')
       small.setAttribute('class', 'grey')
-      let a = document.createElement('a')
-      a.textContent = '在hanime1.me上搜索'
-      a.href =
-        'https://hanime1.me/search?query=' + encodeURIComponent(originTitle)
-      small.appendChild(a)
+      resources.forEach(resource => {
+        let a = document.createElement('a')
+        a.textContent = `在${resource['name']}上搜索`
+        a.href = resource['searchURL'] + encodeURIComponent(originTitle)
+        small.appendChild(a)
+        small.appendChild(document.createElement("br"))
+      })
+      titleTag.appendChild(document.createElement("br"))
       titleTag.appendChild(small)
     })
 })()
