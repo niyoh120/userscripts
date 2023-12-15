@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         使用aria2下载hanime1.me的视频合集
 // @namespace    https://github.com/niyoh120/userscripts/hanime1.me.user.js
-// @version      0.1
+// @version      0.2
 // @description  使用aria2下载hanime1.me的视频合集
 // @author       niyoh
 // @match        https://hanime1.me/watch*
@@ -156,6 +156,31 @@ await (async function () {
     await addDownloadTask(collectTitle, downloadInfoList)
   }
 
+  async function downloadOne () {
+    const collectTitle = getCollectTitle()
+    console.log(collectTitle)
+    const urlList = [getDownloadPageURL(window.location.href)]
+    const downloadInfoList = await Promise.all(
+      urlList.map(url => {
+        return getDownloadInfo(url)
+      })
+    )
+    console.log(downloadInfoList)
+    await addDownloadTask(collectTitle, downloadInfoList)
+  }
+
+  function getDownloadPageURL (watchURL) {
+    // 获取当前页面的 URL
+    const url = new URL(watchURL)
+    const baseURL = url.origin
+
+    const params = url.searchParams
+    let videoID = params.get('v')
+    let downloadPageURL = `${baseURL}/download?v=${videoID}`
+
+    return downloadPageURL
+  }
+
   function modifyConfig () {
     for (const key in defaultConfig) {
       console.log(`${key}: ${GM_getValue(key, defaultConfig[key])}`)
@@ -194,5 +219,6 @@ await (async function () {
 
   cleanupConfig()
   GM_registerMenuCommand('设置', modifyConfig)
+  GM_registerMenuCommand('下载本集', downloadOne)
   GM_registerMenuCommand('下载合集', downloadCollection)
 })()
