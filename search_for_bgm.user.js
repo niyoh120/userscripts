@@ -1,15 +1,15 @@
 // ==UserScript==
 // @name         给bgm.tv增加资源搜索功能
 // @namespace    https://github.com/niyoh120/userscripts
-// @version      0.2
+// @version      0.3
 // @description  给bgm.tv增加资源搜索功能
 // @author       niyoh
-// @match        https://bgm.tv/anime/list/*/collect*
-// @match        https://bangumi.tv/anime/list/*/collect*
+// @match        https://bgm.tv/anime/list/*/*
+// @match        https://bangumi.tv/anime/list/*/*
 // ==/UserScript==
 
-await (async function () {
-  'use strict'
+'use strict'
+;(() => {
   document
     .querySelector('ul#browserItemList')
     .querySelectorAll('li')
@@ -55,9 +55,9 @@ await (async function () {
         a.textContent = `在${resource['name']}上搜索`
         a.href = resource['searchURL'] + encodeURIComponent(originTitle)
         small.appendChild(a)
-        small.appendChild(document.createElement("br"))
+        small.appendChild(document.createElement('br'))
       })
-      titleTag.appendChild(document.createElement("br"))
+      titleTag.appendChild(document.createElement('br'))
       titleTag.appendChild(small)
     })
 })()
