@@ -56,7 +56,7 @@ async function open () {
 
   data = await response.json()
   data = data.data
-  console.log(data)
+  console.log(`resp for getMultiTokenByLoginTicket: ${data}`)
 
   let stoken = ''
   for (let i = 0; i < data.list.length; i++) {
@@ -67,7 +67,7 @@ async function open () {
   }
 
   let cookies = `${document.cookie}; stuid=${uid}; stoken=${stoken}`
-  console.log(cookies)
+  console.log(`cookies for getUserGameRolesByCookie: ${cookies}`)
 
   url =
     `https://api-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?` +
@@ -87,9 +87,11 @@ async function open () {
       })
     })
   })()
-  console.log(response.response)
+  console.log(`resp for getUserGameRolesByCookie: ${response.response}`)
 
-  data = response.response.data.list[0]
+  let dataList = response.response.data.list
+  console.log(`dataList for getUserGameRolesByCookie: ${dataList}`)
+  data = dataList[0]
 
   const auth_appid = 'webview_gacha'
   const nickname = data['nickname']
@@ -145,7 +147,7 @@ async function open () {
     timestamp: timestamp,
     lang: 'zh-cn',
     device_type: 'mobile',
-    plat_type: 'android',
+    plat_type: 'android'r
     region: region,
     authkey: auth_key,
     game_biz: game_biz
