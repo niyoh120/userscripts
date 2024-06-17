@@ -1414,13 +1414,19 @@
     }
   }
   async function addDownloadTask(collectTitle, downloadInfoList) {
+    const SECURE_PROTOCOL = ["wss:", "https:"];
     const config = loadConfig();
     console.log(config);
     let url = new URL(config["aria2-rpc-address"]);
+    const secure = SECURE_PROTOCOL.includes(url.protocol);
+    let port = secure ? 443 : 80;
+    if (url.port != "") {
+      port = parseInt(url.port);
+    }
     const aria2 = new Aria2RPC_1(
       {
         host: url.hostname,
-        port: parseInt(url.port),
+        port,
         secure: url.protocol == "wss:",
         secret: config["aria2-rpc-secret"],
         path: url.pathname
