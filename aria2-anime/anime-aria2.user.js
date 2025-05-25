@@ -1427,7 +1427,7 @@
       {
         host: url.hostname,
         port,
-        secure: url.protocol == "wss:",
+        secure,
         secret: config["aria2-rpc-secret"],
         path: url.pathname
       },
